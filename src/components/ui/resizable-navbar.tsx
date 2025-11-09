@@ -1,4 +1,5 @@
 "use client";
+
 import { cn } from "@/lib/utils";
 import { IconMenu2, IconX, IconMoon, IconSun } from "@tabler/icons-react";
 import {
@@ -7,7 +8,6 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "framer-motion";
-
 import React, { useRef, useState, useEffect } from "react";
 
 
@@ -49,7 +49,7 @@ interface MobileNavMenuProps {
   onClose: () => void;
 }
 
-export const Navbar = ({ children, className }: NavbarProps) => {
+const Navbar = ({ children, className }: NavbarProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll({
     target: ref,
@@ -83,7 +83,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
   );
 };
 
-export const NavBody = ({ children, className, visible }: NavBodyProps) => {
+const NavBody = ({ children, className, visible }: NavBodyProps) => {
   return (
     <motion.div
       animate={{
@@ -104,7 +104,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
       }}
       className={cn(
         "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-transparent px-4 py-2 lg:flex dark:bg-transparent",
-        visible && "bg-white/80 dark:bg-neutral-950/80",
+        visible && "bg-white/80 dark:bg-black/90",
         className,
       )}
     >
@@ -113,14 +113,14 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
   );
 };
 
-export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
+const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
+        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 transition duration-200 hover:text-zinc-800 dark:hover:text-white lg:flex lg:space-x-2",
         className,
       )}
     >
@@ -135,7 +135,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
           {hovered === idx && (
             <motion.div
               layoutId="hovered"
-              className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
+              className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-zinc-800"
             />
           )}
           <span className="relative z-20">{item.name}</span>
@@ -145,7 +145,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
   );
 };
 
-export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
+const MobileNav = ({ children, className, visible }: MobileNavProps) => {
   return (
     <motion.div
       animate={{
@@ -166,7 +166,7 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
       }}
       className={cn(
         "relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between bg-transparent px-0 py-2 lg:hidden",
-        visible && "bg-white/80 dark:bg-neutral-950/80",
+        visible && "bg-white/80 dark:bg-black/90",
         className,
       )}
     >
@@ -175,7 +175,7 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
   );
 };
 
-export const MobileNavHeader = ({
+const MobileNavHeader = ({
   children,
   className,
 }: MobileNavHeaderProps) => {
@@ -191,7 +191,7 @@ export const MobileNavHeader = ({
   );
 };
 
-export const MobileNavMenu = ({
+const MobileNavMenu = ({
   children,
   className,
   isOpen,
@@ -205,7 +205,7 @@ export const MobileNavMenu = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className={cn(
-            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white px-4 py-8 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] dark:bg-neutral-950",
+            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white px-4 py-8 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] dark:bg-black border dark:border-zinc-800",
             className,
           )}
         >
@@ -216,7 +216,7 @@ export const MobileNavMenu = ({
   );
 };
 
-export const MobileNavToggle = ({
+const MobileNavToggle = ({
   isOpen,
   onClick,
 }: {
@@ -230,7 +230,7 @@ export const MobileNavToggle = ({
   );
 };
 
-export const NavbarLogo = () => {
+const NavbarLogo = () => {
   return (
     <a
       href="#"
@@ -243,7 +243,7 @@ export const NavbarLogo = () => {
   );
 };
 
-export const NavbarButton = ({
+const NavbarButton = ({
   href,
   as: Tag = "a",
   children,
@@ -283,13 +283,19 @@ export const NavbarButton = ({
   );
 };
 
-export const ThemeToggle = ({ className }: { className?: string }) => {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
+const ThemeToggle = ({ className }: { className?: string }) => {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
-    // Check initial theme from document
+    // Check initial theme from document or set default to light
     const isDark = document.documentElement.classList.contains("dark");
-    setTheme(isDark ? "dark" : "light");
+    const newTheme = isDark ? "dark" : "light";
+    setTheme(newTheme);
+    
+    // If no theme is set, default to light mode
+    if (!isDark) {
+      document.documentElement.classList.remove("dark");
+    }
   }, []);
 
   const toggleTheme = () => {
@@ -319,4 +325,17 @@ export const ThemeToggle = ({ className }: { className?: string }) => {
       )}
     </button>
   );
+};
+
+export {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  MobileNavHeader,
+  MobileNavMenu,
+  MobileNavToggle,
+  NavbarLogo,
+  NavbarButton,
+  ThemeToggle,
 };

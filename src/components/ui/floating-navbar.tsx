@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import {
   motion,
@@ -9,7 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-export const FloatingNav = ({
+const FloatingNav = ({
   navItems,
   className,
 }: {
@@ -22,41 +23,64 @@ export const FloatingNav = ({
 }) => {
   const { scrollYProgress } = useScroll();
 
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useMotionValueEvent(scrollYProgress, "change", (current) => {
-    // Check if current is not undefined and is a number
     if (typeof current === "number") {
-      let direction = current! - scrollYProgress.getPrevious()!;
-
-      if (scrollYProgress.get() < 0.05) {
+      const scrollPosition = scrollYProgress.get();
+      const direction = current - (scrollYProgress.getPrevious() || 0);
+      
+      // Check if scrolled past threshold (5% of page)
+      const scrolled = scrollPosition > 0.05;
+      setIsScrolled(scrolled);
+      
+      // Show/hide based on scroll direction
+      if (scrollPosition < 0.05) {
         setVisible(true);
       } else {
-        if (direction < 0) {
-          setVisible(true);
-        } else {
-          setVisible(false);
-        }
+        setVisible(direction < 0);
       }
     }
   });
 
   return (
     <AnimatePresence mode="wait">
+      <div className={cn(
+        "fixed top-10 inset-x-0 mx-auto w-fit rounded-full transition-all duration-300",
+        "pointer-events-none",
+        "backdrop-blur-xl",
+        "bg-white/20 dark:bg-black/40",
+        "border border-white/30 dark:border-white/20",
+        isScrolled ? "opacity-100" : "opacity-0",
+        "shadow-2xl"
+      )} />
       <motion.div
         initial={{
           opacity: 1,
           y: -100,
+          backgroundColor: 'transparent',
+          backdropFilter: 'none',
         }}
         animate={{
           y: visible ? 0 : -100,
           opacity: visible ? 1 : 0,
+          backgroundColor: isScrolled ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+          backdropFilter: isScrolled ? 'blur(16px)' : 'none',
         }}
         transition={{
-          duration: 0.2,
+          duration: 0.3,
+          backgroundColor: { duration: 0.3 },
+          backdropFilter: { duration: 0.3 },
         }}
         className={cn(
-          "flex max-w-fit fixed top-10 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-black bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] pr-2 pl-8 py-2 items-center justify-center space-x-4",
+          "flex max-w-fit fixed top-10 inset-x-0 mx-auto rounded-full",
+          "bg-white/30 dark:bg-black/40 backdrop-blur-xl",
+          "shadow-2xl",
+          "z-50 pr-2 pl-8 py-2 items-center justify-center space-x-4",
+          "transition-all duration-300",
+          "border border-white/30 dark:border-white/20",
+          "hover:bg-white/40 dark:hover:bg-black/60",
           className
         )}
       >
@@ -80,3 +104,5 @@ export const FloatingNav = ({
     </AnimatePresence>
   );
 };
+
+export default FloatingNav;
